@@ -45,7 +45,7 @@ if args.cuda:
 kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
 
 print('Load model')
-model = models.vgg13()
+model = models.resnet18()
 model.load_state_dict(torch.load(args.pre_trained_net))
 print(model)
 
@@ -88,7 +88,7 @@ def generate_target():
 def generate_non_target():
     model.eval()
     total = 0
-    f2 = open('%s/confidence_Base_Out.txt'%args.outf, 'w')
+    f2 = open('%s/confidence_Base_Out_%s.txt' % (args.outf, args.out_dataset), 'w')
 
     for data, target in nt_test_loader:
         total += data.size(0)
