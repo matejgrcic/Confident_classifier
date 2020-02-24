@@ -82,13 +82,13 @@ def generate_target():
             soft_out = F.softmax(output)
             soft_out = torch.max(soft_out.data)
             f1.write("{}\n".format(soft_out))
-
+    f1.close()
     print('\n Final Accuracy: {}/{} ({:.2f}%)\n'.format(correct, total, 100. * correct / total))
 
 def generate_non_target():
     model.eval()
     total = 0
-    f2 = open('%s/confidence_Base_Out_%s.txt' % (args.outf, args.out_dataset), 'w')
+    f2 = open('%s/confidence_Base_Out.txt' % args.outf, 'w')
 
     for data, target in nt_test_loader:
         total += data.size(0)
@@ -102,6 +102,7 @@ def generate_non_target():
             soft_out = F.softmax(output)
             soft_out = torch.max(soft_out.data)
             f2.write("{}\n".format(soft_out))
+    f2.close()
 
 print('generate log from in-distribution data')
 generate_target()

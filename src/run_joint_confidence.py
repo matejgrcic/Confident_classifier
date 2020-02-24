@@ -194,8 +194,7 @@ if __name__ == '__main__':
             optimizerG.param_groups[0]['lr'] *= args.droprate
             optimizerD.param_groups[0]['lr'] *= args.droprate
             optimizer.param_groups[0]['lr'] *= args.droprate
-        if epoch % 20 == 0:
-            # do checkpointing
-            torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (args.outf, epoch))
-            torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (args.outf, epoch))
-            torch.save(model.state_dict(), '%s/model_epoch_%d.pth' % (args.outf, epoch))
+        # do checkpointing
+        torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (args.outf, epoch))
+        torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (args.outf, epoch))
+        torch.save(model.state_dict(), '%s/model_epoch_%d.pth' % (args.outf, epoch))

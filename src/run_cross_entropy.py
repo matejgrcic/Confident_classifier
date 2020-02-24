@@ -102,5 +102,4 @@ for epoch in range(1, args.epochs + 1):
     if epoch in decreasing_lr:
         optimizer.param_groups[0]['lr'] *= args.droprate
     test(epoch)
-    if epoch % 50 == 0:
-        torch.save(model.state_dict(), '%s/model_epoch_%d.pth' % (args.outf, epoch))
+    torch.save(model.state_dict(), '%s/model_epoch_%d.pth' % (args.outf, epoch))
