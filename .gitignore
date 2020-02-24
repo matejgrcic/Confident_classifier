@@ -4,3 +4,6 @@ appengine-generated/
 data/*
 results/*
 test/*
+venv
+.idea
+.DS_Store

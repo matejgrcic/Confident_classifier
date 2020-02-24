@@ -55,7 +55,7 @@ print('load data: ',args.dataset)
 train_loader, test_loader = data_loader.getTargetDataSet(args.dataset, args.batch_size, args.imageSize, args.dataroot)
 
 print('Load model')
-model = models.vgg13()
+model = models.resnet18(pretrained=True)
 print(model)
 
 print('load GAN')
@@ -186,16 +186,16 @@ def test(epoch):
         test_loss, correct, total,
         100. * correct / total))
 
-
-for epoch in range(1, args.epochs + 1):
-    train(epoch)
-    test(epoch)
-    if epoch in decreasing_lr:
-        optimizerG.param_groups[0]['lr'] *= args.droprate
-        optimizerD.param_groups[0]['lr'] *= args.droprate
-        optimizer.param_groups[0]['lr'] *= args.droprate
-    if epoch % 20 == 0:
-        # do checkpointing
-        torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (args.outf, epoch))
-        torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (args.outf, epoch))
-        torch.save(model.state_dict(), '%s/model_epoch_%d.pth' % (args.outf, epoch))
+if __name__ == '__main__':
+    for epoch in range(1, args.epochs + 1):
+        train(epoch)
+        test(epoch)
+        if epoch in decreasing_lr:
+            optimizerG.param_groups[0]['lr'] *= args.droprate
+            optimizerD.param_groups[0]['lr'] *= args.droprate
+            optimizer.param_groups[0]['lr'] *= args.droprate
+        if epoch % 20 == 0:
+            # do checkpointing
+            torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (args.outf, epoch))
+            torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (args.outf, epoch))
+            torch.save(model.state_dict(), '%s/model_epoch_%d.pth' % (args.outf, epoch))

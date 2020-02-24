@@ -15,7 +15,6 @@ import calculate_log as callog
 import models
 import math
 
-from torch.utils.serialization import load_lua
 from torchvision import datasets, transforms
 from torch.nn.parameter import Parameter
 from torch.autograd import Variable

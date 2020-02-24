@@ -49,7 +49,7 @@ print('load data: ',args.dataset)
 train_loader, test_loader = data_loader.getTargetDataSet(args.dataset, args.batch_size, args.imageSize, args.dataroot)
 
 print('Load model')
-model = models.vgg13()
+model = models.resnet18(pretrained=True)
 print(model)
 
 if args.cuda:
