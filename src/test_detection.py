@@ -63,25 +63,25 @@ def generate_target():
     correct = 0
     total = 0
     f1 = open('%s/confidence_Base_In.txt'%args.outf, 'w')
+    with torch.no_grad():
+        for data, target in test_loader:
+            total += data.size(0)
+            #vutils.save_image(data, '%s/target_samples.png'%args.outf, normalize=True)
+            if args.cuda:
+                data, target = data.cuda(), target.cuda()
+            data, target = Variable(data, volatile=True), Variable(target)
+            batch_output = model(data)
 
-    for data, target in test_loader:
-        total += data.size(0)
-        #vutils.save_image(data, '%s/target_samples.png'%args.outf, normalize=True)
-        if args.cuda:
-            data, target = data.cuda(), target.cuda()
-        data, target = Variable(data, volatile=True), Variable(target)
-        batch_output = model(data)
-
-        # compute the accuracy
-        pred = batch_output.data.max(1)[1]
-        equal_flag = pred.eq(target.data).cpu()
-        correct += equal_flag.sum()
-        for i in range(data.size(0)):
-            # confidence score: max_y p(y|x)
-            output = batch_output[i].view(1,-1)
-            soft_out = F.softmax(output)
-            soft_out = torch.max(soft_out.data)
-            f1.write("{}\n".format(soft_out))
+            # compute the accuracy
+            pred = batch_output.data.max(1)[1]
+            equal_flag = pred.eq(target.data).cpu()
+            correct += equal_flag.sum()
+            for i in range(data.size(0)):
+                # confidence score: max_y p(y|x)
+                output = batch_output[i].view(1,-1)
+                soft_out = F.softmax(output)
+                soft_out = torch.max(soft_out.data)
+                f1.write("{}\n".format(soft_out))
     f1.close()
     print('\n Final Accuracy: {}/{} ({:.2f}%)\n'.format(correct, total, 100. * correct / total))
 
@@ -89,19 +89,19 @@ def generate_non_target():
     model.eval()
     total = 0
     f2 = open('%s/confidence_Base_Out.txt' % args.outf, 'w')
-
-    for data, target in nt_test_loader:
-        total += data.size(0)
-        if args.cuda:
-            data, target = data.cuda(), target.cuda()
-        data, target = Variable(data, volatile=True), Variable(target)
-        batch_output = model(data)
-        for i in range(data.size(0)):
-            # confidence score: max_y p(y|x)
-            output = batch_output[i].view(1,-1)
-            soft_out = F.softmax(output)
-            soft_out = torch.max(soft_out.data)
-            f2.write("{}\n".format(soft_out))
+    with torch.no_grad():
+        for data, target in nt_test_loader:
+            total += data.size(0)
+            if args.cuda:
+                data, target = data.cuda(), target.cuda()
+            data, target = Variable(data, volatile=True), Variable(target)
+            batch_output = model(data)
+            for i in range(data.size(0)):
+                # confidence score: max_y p(y|x)
+                output = batch_output[i].view(1,-1)
+                soft_out = F.softmax(output)
+                soft_out = torch.max(soft_out.data)
+                f2.write("{}\n".format(soft_out))
     f2.close()
 
 print('generate log from in-distribution data')

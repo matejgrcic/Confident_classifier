@@ -23,6 +23,7 @@ parser.add_argument('--batch-size', type=int, default=64, help='input batch size
 parser.add_argument('--epochs', type=int, default=50, help='number of epochs to train')
 parser.add_argument('--lr', type=float, default=0.0002, help='learning rate')
 parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
+parser.add_argument('--pretrained', action='store_true', default=False, help='imagenet pretrained')
 parser.add_argument('--seed', type=int, default=1, help='random seed')
 parser.add_argument('--log-interval', type=int, default=100, help='how many batches to wait before logging training status')
 parser.add_argument('--dataset', default='svhn', help='cifar10 | svhn')
@@ -55,7 +56,7 @@ print('load data: ',args.dataset)
 train_loader, test_loader = data_loader.getTargetDataSet(args.dataset, args.batch_size, args.imageSize, args.dataroot)
 
 print('Load model')
-model = models.resnet18(pretrained=True)
+model = models.resnet18(pretrained=args.pretrained)
 print(model)
 
 print('load GAN')
