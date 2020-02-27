@@ -14,11 +14,11 @@ def getSVHN(batch_size, img_size=32, data_root='/tmp/public_dataset/pytorch', tr
     kwargs.pop('input_size', None)
     print("Building SVHN data loader with {} workers".format(num_workers))
 
-    def target_transform(target):
-        new_target = target - 1
-        if new_target == -1:
-            new_target = 9
-        return new_target
+    # def target_transform(target):
+    #     new_target = target - 1
+    #     if new_target == -1:
+    #         new_target = 9
+    #     return new_target
 
     ds = []
     if train:
@@ -29,7 +29,7 @@ def getSVHN(batch_size, img_size=32, data_root='/tmp/public_dataset/pytorch', tr
                     transforms.Scale(img_size),
                     transforms.ToTensor(),
                 ]),
-                target_transform=target_transform,
+                # target_transform=target_transform,
             ),
             batch_size=batch_size, shuffle=True, **kwargs)
         ds.append(train_loader)
@@ -42,7 +42,7 @@ def getSVHN(batch_size, img_size=32, data_root='/tmp/public_dataset/pytorch', tr
                     transforms.Scale(img_size),
                     transforms.ToTensor(),
                 ]),
-                target_transform=target_transform
+                # target_transform=target_transform
             ),
             batch_size=batch_size, shuffle=False, **kwargs)
         ds.append(test_loader)
