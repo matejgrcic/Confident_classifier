@@ -72,7 +72,7 @@ def train(epoch):
         output = F.log_softmax(logits)
 
         soft_out = F.softmax(logits)
-        soft_out = 1 + soft_out * torch.log10(soft_out)
+        soft_out = - soft_out * torch.log10(soft_out)
         loss_force = torch.sum(soft_out, dim=1).mean()
         loss = F.nll_loss(output, target) + args.beta * loss_force
         loss.backward()
