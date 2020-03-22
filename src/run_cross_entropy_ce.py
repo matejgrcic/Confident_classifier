@@ -52,7 +52,7 @@ train_loader, test_loader = data_loader.getTargetDataSet(args.dataset, args.batc
 
 print('Load model')
 model = models.resnet18(pretrained=args.pretrained)
-print(model)
+# print(model)
 
 if args.cuda:
     model.cuda()
@@ -78,9 +78,9 @@ def train(epoch):
         loss.backward()
         optimizer.step()
         if batch_idx % args.log_interval == 0:
-            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+            print('Train Epoch: {} [{}/{} ({:.0f}%)]\t Total Loss: {:.6f} force loss:  {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
-                100. * batch_idx / len(train_loader), loss.data.item()))
+                100. * batch_idx / len(train_loader), loss.data.item(), loss_force.data.item()))
 
 def test(epoch):
     model.eval()
