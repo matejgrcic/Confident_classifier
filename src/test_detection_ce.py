@@ -81,7 +81,7 @@ def generate_target():
                 output = batch_output[i].view(1,-1)
                 soft_out = F.softmax(output)
                 soft_out = 1 + soft_out * torch.log10(soft_out)
-                f1.write("{}\n".format(soft_out.item()))
+                f1.write("{}\n".format(soft_out.sum().item()))
     f1.close()
     print('\n Final Accuracy: {}/{} ({:.2f}%)\n'.format(correct, total, 100. * correct / total))
 
