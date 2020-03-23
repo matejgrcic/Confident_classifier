@@ -81,9 +81,9 @@ def getCIFAR10(batch_size, img_size=32, data_root='/tmp/public_dataset/pytorch',
 
 def getTargetDataSet(data_type, batch_size, imageSize, dataroot):
     if data_type == 'cifar10':
-        train_loader, test_loader = getCIFAR10(batch_size=batch_size, img_size=imageSize, data_root=dataroot, num_workers=70)
+        train_loader, test_loader = getCIFAR10(batch_size=batch_size, img_size=imageSize, data_root=dataroot, num_workers=1)
     elif data_type == 'svhn':
-        train_loader, test_loader = getSVHN(batch_size=batch_size, img_size=imageSize, data_root=dataroot, num_workers=70)
+        train_loader, test_loader = getSVHN(batch_size=batch_size, img_size=imageSize, data_root=dataroot, num_workers=1)
 
     return train_loader, test_loader
 
