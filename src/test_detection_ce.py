@@ -32,6 +32,7 @@ parser.add_argument('--outf', default='/home/rack/KM/2017_Codes/overconfidence/t
 parser.add_argument('--out_dataset', required=True, help='out-of-dist dataset: cifar10 | svhn | imagenet | lsun')
 parser.add_argument('--num_classes', type=int, default=10, help='number of classes (default: 10)')
 parser.add_argument('--pre_trained_net', default='', help="path to pre trained_net")
+parser.add_argument('--model', default='resnet', help='resnet | densenet')
 
 args = parser.parse_args()
 print(args)
@@ -45,9 +46,13 @@ if args.cuda:
 kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
 
 print('Load model')
-model = models.resnet18()
+if args.model == 'resnet':
+    model = models.resnet18(pretrained=args.pretrained)
+elif args.model == 'densenet':
+    model = models.densenet121(pretrained=args.pretrained)
+else:
+    raise Exception('invalid model selected')
 model.load_state_dict(torch.load(args.pre_trained_net))
-print(model)
 
 print('load target data: ',args.dataset)
 _, test_loader = data_loader.getTargetDataSet(args.dataset, args.batch_size, args.imageSize, args.dataroot)

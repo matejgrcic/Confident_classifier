@@ -34,6 +34,7 @@ parser.add_argument('--outf', default='.', help='folder to output images and mod
 parser.add_argument('--wd', type=float, default=0.0, help='weight decay')
 parser.add_argument('--droprate', type=float, default=0.1, help='learning rate decay')
 parser.add_argument('--decreasing_lr', default='60', help='decreasing strategy')
+parser.add_argument('--model', default='resnet', help='resnet | densenet')
 
 args = parser.parse_args()
 print(args)
@@ -50,8 +51,12 @@ print('load data: ',args.dataset)
 train_loader, test_loader = data_loader.getTargetDataSet(args.dataset, args.batch_size, args.imageSize, args.dataroot)
 
 print('Load model')
-model = models.resnet18(pretrained=args.pretrained)
-print(model)
+if args.model == 'resnet':
+    model = models.resnet18(pretrained=args.pretrained)
+elif args.model == 'densenet':
+    model = models.densenet121(pretrained=args.pretrained)
+else:
+    raise Exception('invalid model selected')
 
 if args.cuda:
     model.cuda()

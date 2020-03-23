@@ -67,3 +67,4 @@ Densenet-161                      22.35           6.20
 from .vgg import *
 from .gan import *
 from .resnet import *
+from .densenet import *
