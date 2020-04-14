@@ -47,9 +47,9 @@ kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
 
 print('Load model')
 if args.model == 'resnet':
-    model = models.resnet18(pretrained=args.pretrained)
+    model = models.resnet18()
 elif args.model == 'densenet':
-    model = models.densenet121(pretrained=args.pretrained)
+    model = models.densenet121()
 else:
     raise Exception('invalid model selected')
 model.load_state_dict(torch.load(args.pre_trained_net))
