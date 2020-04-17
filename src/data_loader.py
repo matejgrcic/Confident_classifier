@@ -98,5 +98,7 @@ def getNonTargetDataSet(data_type, batch_size, imageSize, dataroot):
     elif data_type == 'lsun':
         testsetout = datasets.ImageFolder(dataroot+"/LSUN_resize", transform=transforms.Compose([transforms.Scale(imageSize),transforms.ToTensor()]))
         test_loader = torch.utils.data.DataLoader(testsetout, batch_size=batch_size, shuffle=False, num_workers=1)
-
+    elif data_type == 'traffic-sign':
+        testsetout = datasets.ImageFolder(dataroot+"/GTSRB/Training", transform=transforms.Compose([transforms.Scale(imageSize),transforms.ToTensor()]))
+        test_loader = torch.utils.data.DataLoader(testsetout, batch_size=batch_size, shuffle=False, num_workers=1)
     return test_loader
