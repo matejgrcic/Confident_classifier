@@ -97,6 +97,7 @@ def generate_target():
 
 def generate_non_target():
     model.eval()
+    ood_head.eval()
     total = 0
     f2 = open('%s/confidence_Base_Out.txt' % args.outf, 'w')
     with torch.no_grad():
