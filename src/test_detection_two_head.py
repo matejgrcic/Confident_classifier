@@ -47,7 +47,7 @@ kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
 
 print('Load model')
 if args.model == 'resnet':
-    model = models.resnet18()
+    model = models.resnet18_two_head()
 elif args.model == 'densenet':
     model = models.densenet121()
 else:
@@ -92,7 +92,6 @@ def generate_target():
 
 def generate_non_target():
     model.eval()
-    ood_head.eval()
     total = 0
     f2 = open('%s/confidence_Base_Out.txt' % args.outf, 'w')
     with torch.no_grad():
