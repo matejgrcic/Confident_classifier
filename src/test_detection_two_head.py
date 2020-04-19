@@ -45,7 +45,7 @@ if args.cuda:
 kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
 
 print('Load model')
-model = resnet18_two_head()
+model = resnet18_two_head(num_classes=10)
 model.load_state_dict(torch.load(args.pre_trained_net))
 
 print('load target data: ',args.dataset)
