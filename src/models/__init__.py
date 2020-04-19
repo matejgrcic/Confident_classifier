@@ -68,3 +68,4 @@ from .vgg import *
 from .gan import *
 from .resnet import *
 from .densenet import *
+from .resnet import resnet18_two_head

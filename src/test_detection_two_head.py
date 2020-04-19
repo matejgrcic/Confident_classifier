@@ -12,7 +12,7 @@ import data_loader
 import numpy as np
 import torchvision.utils as vutils
 import calculate_log as callog
-import models
+from models import resnet18_two_head
 import math
 
 from torchvision import datasets, transforms
@@ -31,8 +31,7 @@ parser.add_argument('--imageSize', type=int, default=32, help='the height / widt
 parser.add_argument('--outf', default='/home/rack/KM/2017_Codes/overconfidence/test/log_entropy', help='folder to output images and model checkpoints')
 parser.add_argument('--out_dataset', required=True, help='out-of-dist dataset: cifar10 | svhn | imagenet | lsun')
 parser.add_argument('--num_classes', type=int, default=10, help='number of classes (default: 10)')
-parser.add_argument('--pre_trained_net', default='', help="path to pre trained_net")
-parser.add_argument('--model', default='resnet', help='resnet | densenet')
+parser.add_argument('--pre_trained_net', default='', help='path to pre trained_net')
 
 args = parser.parse_args()
 print(args)
@@ -46,12 +45,7 @@ if args.cuda:
 kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
 
 print('Load model')
-if args.model == 'resnet':
-    model = models.resnet18_two_head()
-elif args.model == 'densenet':
-    model = models.densenet121()
-else:
-    raise Exception('invalid model selected')
+model = resnet18_two_head()
 model.load_state_dict(torch.load(args.pre_trained_net))
 
 print('load target data: ',args.dataset)
