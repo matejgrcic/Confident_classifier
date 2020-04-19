@@ -32,7 +32,6 @@ parser.add_argument('--outf', default='/home/rack/KM/2017_Codes/overconfidence/t
 parser.add_argument('--out_dataset', required=True, help='out-of-dist dataset: cifar10 | svhn | imagenet | lsun')
 parser.add_argument('--num_classes', type=int, default=10, help='number of classes (default: 10)')
 parser.add_argument('--pre_trained_net', default='', help="path to pre trained_net")
-parser.add_argument('--pre_trained_ood_head', default='', help="path to pretrained ood head")
 parser.add_argument('--model', default='resnet', help='resnet | densenet')
 
 args = parser.parse_args()
@@ -55,9 +54,6 @@ else:
     raise Exception('invalid model selected')
 model.load_state_dict(torch.load(args.pre_trained_net))
 
-ood_head = torch.nn.Linear(args.num_classes, 2)
-ood_head.load_state_dict(torch.load(args.pre_trained_ood_head))
-
 print('load target data: ',args.dataset)
 _, test_loader = data_loader.getTargetDataSet(args.dataset, args.batch_size, args.imageSize, args.dataroot)
 
@@ -66,7 +62,6 @@ nt_test_loader = data_loader.getNonTargetDataSet(args.out_dataset, args.batch_si
 
 if args.cuda:
     model.cuda()
-    ood_head.cuda()
 
 def generate_target():
     model.eval()
@@ -80,7 +75,7 @@ def generate_target():
             if args.cuda:
                 data, target = data.cuda(), target.cuda()
             data, target = Variable(data, volatile=True), Variable(target)
-            batch_output = model(data)
+            batch_output, _ = model(data)
 
             # compute the accuracy
             pred = batch_output.data.max(1)[1]
@@ -106,8 +101,8 @@ def generate_non_target():
             if args.cuda:
                 data, target = data.cuda(), target.cuda()
             data, target = Variable(data, volatile=True), Variable(target)
-            batch_output = model(data)
-            batch_output = ood_head(batch_output)[:, 1]
+            _, batch_output = model(data)
+            batch_output = batch_output[:, 1]
             for i in range(data.size(0)):
                 # confidence score: max_y p(y|x)
                 output = batch_output[i].view(1,-1)
