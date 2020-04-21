@@ -107,8 +107,8 @@ def generate_non_target():
                 soft_out = F.softmax(output)
                 soft_out_1 = 1 + soft_out * torch.log10(soft_out)
                 soft_out_2 = torch.max(soft_out.data)
-                soft_out = torch.cat((soft_out_1.reshape(-1, 1), soft_out_2.reshape(-1, 1)), dim=1).max(1)[0]
-                f2.write("{}\n".format(soft_out.sum().item()))
+                soft_out = max(soft_out_1.item(), soft_out_2.sum().item())
+                f2.write("{}\n".format(soft_out))
     f2.close()
 
 print('generate log from in-distribution data')
