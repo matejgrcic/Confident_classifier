@@ -106,7 +106,7 @@ def generate_non_target():
                 output = batch_output[i].view(1,-1)
                 soft_out = F.softmax(output)
                 soft_out = (1/args.num_classes) * torch.log2(soft_out)
-                f2.write("{}\n".format( - soft_out.sum().item()))
+                f2.write("{}\n".format( - soft_out.sum().item()-3))
     f2.close()
 
 print('generate log from in-distribution data')
