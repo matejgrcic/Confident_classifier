@@ -79,10 +79,10 @@ def getCIFAR10(batch_size, img_size=32, data_root='/tmp/public_dataset/pytorch',
     return ds
 
 def getCIFAR100(batch_size, img_size=32, data_root='/tmp/public_dataset/pytorch', train=True, val=True, **kwargs):
-    data_root = os.path.expanduser(os.path.join(data_root, 'cifar10-data'))
+    data_root = os.path.expanduser(os.path.join(data_root, 'cifar100-data'))
     num_workers = kwargs.setdefault('num_workers', 1)
     kwargs.pop('input_size', None)
-    print("Building CIFAR-10 data loader with {} workers".format(num_workers))
+    print("Building CIFAR-100 data loader with {} workers".format(num_workers))
     ds = []
     if train:
         train_loader = torch.utils.data.DataLoader(
