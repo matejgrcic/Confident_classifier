@@ -85,8 +85,8 @@ def generate_target():
                 # confidence score: max_y p(y|x)
                 output = batch_output[i].view(1,-1)
                 soft_out = F.softmax(output)
-                soft_out = 1 + soft_out * torch.log10(soft_out)
-                f1.write("{}\n".format(soft_out.sum().item()))
+                soft_out = torch.max(soft_out.data)
+                f1.write("{}\n".format(soft_out))
     f1.close()
     print('\n Final Accuracy: {}/{} ({:.2f}%)\n'.format(correct, total, 100. * correct / total))
 
@@ -104,8 +104,8 @@ def generate_non_target():
             for i in range(data.size(0)):
                 # confidence score: max_y p(y|x)
                 output = batch_output[i].view(1,-1)
-                output = torch.max(output)
-                soft_out = F.sigmoid(output)
+                soft_out = torch.max(output.data)
+                soft_out = torch.sigmoid(soft_out)
                 f2.write("{}\n".format(soft_out))
     f2.close()
 
