@@ -105,7 +105,7 @@ def generate_non_target():
                 # confidence score: max_y p(y|x)
                 output = batch_output[i].view(1,-1)
                 soft_out = F.softmax(output)
-                soft_out = soft_out * torch.log10(soft_out)
+                soft_out = soft_out * torch.log10(soft_out + 10**-7)
                 f2.write("{}\n".format(1 - soft_out.sum().item()))
     f2.close()
 
