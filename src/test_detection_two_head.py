@@ -101,7 +101,7 @@ def generate_non_target():
                 output = batch_output[i].view(1,-1)
                 soft_out = F.softmax(output)
                 soft_out = soft_out[:, 1]
-                f2.write("{}\n".format(soft_out))
+                f2.write("{}\n".format(soft_out.item()))
     f2.close()
 
 print('generate log from in-distribution data')
