@@ -12,7 +12,7 @@ import data_loader
 import numpy as np
 import torchvision.utils as vutils
 import calculate_log as callog
-from models import resnet18_two_head
+import models
 import math
 
 from torchvision import datasets, transforms
@@ -31,7 +31,8 @@ parser.add_argument('--imageSize', type=int, default=32, help='the height / widt
 parser.add_argument('--outf', default='/home/rack/KM/2017_Codes/overconfidence/test/log_entropy', help='folder to output images and model checkpoints')
 parser.add_argument('--out_dataset', required=True, help='out-of-dist dataset: cifar10 | svhn | imagenet | lsun')
 parser.add_argument('--num_classes', type=int, default=10, help='number of classes (default: 10)')
-parser.add_argument('--pre_trained_net', default='', help='path to pre trained_net')
+parser.add_argument('--pre_trained_net', default='', help="path to pre trained_net")
+parser.add_argument('--model', default='resnet', help='resnet | densenet')
 
 args = parser.parse_args()
 print(args)
@@ -45,7 +46,7 @@ if args.cuda:
 kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
 
 print('Load model')
-model = resnet18_two_head(num_classes=10)
+model = models.resnet18_two_head(num_classes=args.num_classes).cuda()
 model.load_state_dict(torch.load(args.pre_trained_net))
 
 print('load target data: ',args.dataset)
@@ -95,12 +96,11 @@ def generate_non_target():
                 data, target = data.cuda(), target.cuda()
             data, target = Variable(data, volatile=True), Variable(target)
             _, batch_output = model(data)
-            batch_output = batch_output[:, 1]
             for i in range(data.size(0)):
                 # confidence score: max_y p(y|x)
                 output = batch_output[i].view(1,-1)
                 soft_out = F.softmax(output)
-                soft_out = torch.max(soft_out.data)
+                soft_out = soft_out[:, 1]
                 f2.write("{}\n".format(soft_out))
     f2.close()
 
