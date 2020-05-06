@@ -49,7 +49,7 @@ print('Load model')
 if args.model == 'resnet':
     model = models.resnet18(num_classes=args.num_classes)
 elif args.model == 'densenet':
-    model = models.densenet121(num_classes=args.num_classes)
+    model = models.DenseNet(growth_rate=48, drop_rate=0.2, block_config=(6, 6, 6), num_init_features=96)
 else:
     raise Exception('invalid model selected')
 model.load_state_dict(torch.load(args.pre_trained_net))
